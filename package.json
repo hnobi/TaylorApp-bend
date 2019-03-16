@@ -1,0 +1,34 @@
+{
+  "name": "taylorapp-bend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --watch server --exec babel-node server/app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hnobi/TaylorApp-bend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hnobi/TaylorApp-bend/issues"
+  },
+  "homepage": "https://github.com/hnobi/TaylorApp-bend#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.0",
+    "nodemon": "^1.18.10",
+    "pg": "^7.8.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.43.0",
+    "sequelize-cli": "^5.4.0"
+  }
+}
