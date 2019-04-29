@@ -21,23 +21,28 @@ export default class UserController {
     const { username, email, password } = req.body;
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
+    User.findOne({ where: { username } }).then(userFound => {
+      if (userFound) {
+        return res.send({ error: `${username} already have MyTaylor accout` })
+      }
+      User.create({
+        username,
+        email,
+        password: hashedPassword,
+      }).then(user => {
+        return res.status(201)
+          .send({
+            status: 'success',
+            message: 'Successfully created TaylorApp account',
+            data: {
+              username: user.username,
+              email: user.email,
+            }
+          });
+      })
 
-    User.create({
-      username,
-      email,
-      password: hashedPassword,
-    }).then(user => {
-
-      return res.status(201)
-        .send({
-          status:'success',
-          message: 'Successfully created TaylorApp account',
-          data: {
-            username: user.username,
-            email: user.email,
-          }
-        });
     }).catch(e => console.log(e));
+
   }
 
 
@@ -54,7 +59,6 @@ export default class UserController {
     User.findOne({
       where: { username }
     }).then(foundUser => {
-
       if (!foundUser) {
         return res.status(400)
           .json({
@@ -63,7 +67,7 @@ export default class UserController {
           });
       }
       const isValidPassword = bcrypt.compareSync(password, foundUser.password),
-        { role, id, email} = foundUser;
+        { role, id, email } = foundUser;
 
       if (!isValidPassword) {
         return res.status(401).json({
@@ -72,15 +76,34 @@ export default class UserController {
         });
       }
       const token = jwt.sign({ role, userID: id }, process.env.secretKey, { expiresIn: '24h' });
-      return res.send({
+      return res.status(200).send({
         token,
         status: 'success',
         message: 'Successfully login',
-        data:{
+        data: {
           email,
           username
         }
       })
     }).catch(err => console.log(err));
   }
+
+
+  static async updateProfile(req, res) {
+    const { username, password, email, address, role, fullname, image, phoneNumber, } = req.body;
+    const foundUser = await User.findOne({ where: { username } });
+    if (!foundUser) {
+      return res.status(401).send({
+        status: 'error',
+        message: 'User not find'
+      })
+    }
+
+
+
+
+
+
+  }
+
 }
